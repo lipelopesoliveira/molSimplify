@@ -127,7 +127,7 @@ def readcif(name):
         positions = np.array(positions)
         return cpar, atomtypes, positions
 
-def compute_image_flag(cell, fcoord1, fcoord2):
+def compute_image_flag(cell,fcoord1,fcoord2):
     """
     Calculates how to shift fcoord2 to get it as close as possible to fcoord1. Shift by the crystal cell vectors.
 
@@ -156,7 +156,7 @@ def compute_image_flag(cell, fcoord1, fcoord2):
     return supercells[image]
 
 
-def linker_length(adjmat, anchors):
+def linker_length(adjmat,anchors):
     """
     Computes the shortest and longest paths between anchors in a linker.
 
@@ -170,8 +170,8 @@ def linker_length(adjmat, anchors):
     Returns
     -------
     (min_length,max_length) : tuple of ints
-        min_length is the shortest path length between two anchors in a linker.
-        max_length is the longest path length between two anchors in a linker.
+        min_length is the shortest path between two anchors in a linker.
+        max_length is the longest path between two anchors in a linker.
 
     """
     rows, cols = np.where(adjmat == 1)
@@ -188,7 +188,7 @@ def linker_length(adjmat, anchors):
         min_length=min(len(nx.shortest_path(gr,i,j))-1,min_length)
     return (min_length,max_length)
 
-def slice_mat(mat, atoms):
+def slice_mat(mat,atoms):
     """
     Slice the matrix mat.
 
@@ -208,7 +208,7 @@ def slice_mat(mat, atoms):
     return np.array(mat[np.ix_(list(atoms),list(atoms))])
 
 
-def ligand_detect(cell, cart_coords, adj_mat, anchorlist):
+def ligand_detect(cell,cart_coords,adj_mat,anchorlist):
     """
     Calculates how to shift anchor atoms so that they are close to atoms bonded to them.
     I imagine this tackles the issue of two bonded atoms being on different sides of a crystal cell.
@@ -253,7 +253,7 @@ def ligand_detect(cell, cart_coords, adj_mat, anchorlist):
     return np.array(periodic_images)
 
 
-def XYZ_connected(cell, cart_coords, adj_mat):
+def XYZ_connected(cell,cart_coords,adj_mat):
     """
     Calculate fractional coordinates of atoms for the specified connected component, shifted by cell vectors to make the coordinates close to each other.
 
@@ -304,7 +304,7 @@ def XYZ_connected(cell, cart_coords, adj_mat):
         counter+=1
     return fcoords
 
-def writeXYZfcoords(filename, atoms, cell, fcoords):
+def writeXYZfcoords(filename,atoms,cell,fcoords):
     """
     Write an XYZ file using fractional coordinates.
 
@@ -331,7 +331,7 @@ def writeXYZfcoords(filename, atoms, cell, fcoords):
             s="%10.2f %10.2f %10.2f"%(cart_coord[0],cart_coord[1],cart_coord[2])
             fo.write("%s %s\n"%(atoms[i],s))
 
-def writeXYZandGraph(filename, atoms, cell, fcoords, molgraph):
+def writeXYZandGraph(filename,atoms,cell,fcoords,molgraph):
     """
     Write the xyz file for the MOF structure, as well as the net file containing the MOF's graph.
 
@@ -364,7 +364,7 @@ def writeXYZandGraph(filename, atoms, cell, fcoords, molgraph):
     np.savetxt(filename[:-4]+".net",molgraph,fmt="%i",delimiter=",",header=tmpstr) # Save a net file.
 
 
-def returnXYZandGraph(filename, atoms, cell, fcoords, molgraph):
+def returnXYZandGraph(filename,atoms,cell,fcoords,molgraph):
     """
     TODO
 
@@ -396,7 +396,7 @@ def returnXYZandGraph(filename, atoms, cell, fcoords, molgraph):
         np.savetxt(filename[:-4]+".net",molgraph,fmt="%i",delimiter=",",header=tmpstr)
     return coord_list, molgraph
 
-def writeXYZcoords(filename, atoms, coords):
+def writeXYZcoords(filename,atoms,coords):
     """
     Write an XYZ file using Cartesian coordinates.
 
@@ -421,7 +421,7 @@ def writeXYZcoords(filename, atoms, coords):
             fo.write("%s %s\n"%(atoms[i],s))
     return
 
-def writeXYZcoords_withcomment(filename, atoms, coords, comment):
+def writeXYZcoords_withcomment(filename,atoms,coords,comment):
     """
     Write an XYZ file using Cartesian coordinates, with a comment included.
 
@@ -445,7 +445,7 @@ def writeXYZcoords_withcomment(filename, atoms, coords, comment):
             fo.write("%s %s\n"%(atoms[i],s))
     return
 
-def write2file(pt, fn, st):
+def write2file(pt,fn,st):
     """
     Writes the string st to a file.
 
@@ -466,7 +466,7 @@ def write2file(pt, fn, st):
     with open(pt+fn, "a") as fo:
         fo.write(st)
 
-def write_cif(fname, cellprm, fcoords, atom_labels):
+def write_cif(fname,cellprm,fcoords,atom_labels):
     """
     Writes a cif file with the provided parameters.
 
@@ -545,7 +545,7 @@ def cell_to_cellpar(cell, radians=False):
         angles = [angle * np.pi / 180 for angle in angles]
     return np.array(lengths + angles)
 
-def findPaths(G, u, n):
+def findPaths(G,u,n):
     """
     Finds paths between atom u and atoms n bonds away.
 
@@ -611,7 +611,7 @@ def frac_coord(coord, cell):
     invcell=np.linalg.inv(cell)
     return np.dot(coord,invcell)
 
-def compute_distance_matrix3(cell, cart_coords, num_cells=1):
+def compute_distance_matrix3(cell, cart_coords, num_cells = 1):
     """
     Computes the pairwise distances between all atom pairs in the crystal cell.
 
@@ -649,7 +649,7 @@ def compute_distance_matrix3(cell, cart_coords, num_cells=1):
     distance_matrix = np.min(dist, axis=-1) # Consider the distance between two atoms at the crystal cell shift where they are closest.
     return distance_matrix
 
-def position_nearest_atom(cell, cart_coords, index_of_interest, num_cells=1):
+def position_nearest_atom(cell, cart_coords, index_of_interest, num_cells = 1):
     """
     Computes the pairwise distances between all atoms in the crystal cell to the atom specified by index_of_interest; returns the position of the nearest atom.
 
@@ -702,7 +702,7 @@ def position_nearest_atom(cell, cart_coords, index_of_interest, num_cells=1):
 
     return nearest_position, nearest_index, shift_for_nearest_atom
 
-def make_graph_from_nodes_edges(nodes, edges, attribs):
+def make_graph_from_nodes_edges(nodes,edges,attribs):
     """
     TODO
 
@@ -757,7 +757,7 @@ def mkcell(cpar):
     vectors = np.array([a_vec, b_vec, c_vec])
     return vectors
 
-def make_supercell(cell, atoms, fcoords, exp_coeff):
+def make_supercell(cell,atoms,fcoords,exp_coeff):
     """
     TODO
 
@@ -797,7 +797,7 @@ def make_supercell(cell, atoms, fcoords, exp_coeff):
     return supercell,superatoms,superfcoords
 
 
-def compute_adj_matrix(distance_mat, allatomtypes, wiggle_room=1, handle_overlap=False):
+def compute_adj_matrix(distance_mat,allatomtypes,wiggle_room=1,handle_overlap=False):
     """
     Calculates what atoms are bonded to each other.
 
@@ -818,7 +818,7 @@ def compute_adj_matrix(distance_mat, allatomtypes, wiggle_room=1, handle_overlap
     Returns
     -------
     sparse.csr_matrix(adj_matrix) : scipy.sparse.csr.csr_matrix
-        Adjacency matrix. 1 represents a bond, 0 represents no bond. Shape is (number of atoms, number of atoms).
+        1 represents a bond, 0 represents no bond. Shape is (number of atoms, number of atoms).
     overlap_atoms : list
         Indices of atoms that overlap with any atom of a lower index.
 
@@ -902,19 +902,19 @@ def get_closed_subgraph(linkers, SBUlist, adj_matrix):
 
     Parameters
     ----------
-    linkers : set of int
+    linkers : set
         Indices corresponding to atoms in the linkers (or SBUs; see the summary part of this docstring) of the MOF. The part of the matrix to analyze.
-    SBUlist : set of numpy.int64
+    SBUlist : set
         Indices corresponding to atoms in the SBUs (or linkers) of the MOF. The part of the matrix to ignore.
     adj_matrix : scipy.sparse.csr.csr_matrix
-        Adjacency matrix. 1 represents a bond, 0 represents no bond. Shape is (number of atoms, number of atoms).
+        1 represents a bond, 0 represents no bond. Shape is (number of atoms, number of atoms).
 
     Returns
     -------
     linker_list : list of lists of ints
-        Each inner list is its own separate linker (or SBU). The ints are the atom indices of that linker (or SBU). Length is # of linkers (or SBUs).
+        Each inner list is its own separate linker. The ints are the atom indices of that linker. Length is # of linkers.
     linker_subgraphlist : list of scipy.sparse.csr.csr_matrix
-        The atom connections in the linker (or SBU) subgraph. Length is # of linkers (or SBUs).
+        The atom connections in the linker subgraph. Length is # of linkers.
 
     """
 
@@ -922,7 +922,7 @@ def get_closed_subgraph(linkers, SBUlist, adj_matrix):
     linker_list = []
     linker_subgraphlist = []
     counter = 0
-    while len(linkers_sub)>0:
+    while len(linkers_sub) > 0:
         # Every time this while loop is entered, an entire linker will be identified.
         counter += 1
         if counter > 5000:
@@ -933,7 +933,7 @@ def get_closed_subgraph(linkers, SBUlist, adj_matrix):
         while len(checked_list) <= len(current_linker_list):
             loop_over = np.nonzero(adj_matrix[start_idx])[1] # indices of atoms with bonds to the atom with the index start_idx
             current_linker_list.update(loop_over)
-            current_linker_list = current_linker_list-SBUlist
+            current_linker_list = current_linker_list - SBUlist
             checked_list.add(start_idx)
             for val in loop_over:
                 if (not val in SBUlist):
@@ -985,7 +985,7 @@ def include_extra_shells(SBUlists, subgraphlists, molcif, adjmat):
         SBUs.append(list(SBUset))
         subgraphs.append(adjmat[np.ix_(list(SBUset),list(SBUset))])
 
-    return SBUs, subgraphs
+    return SBUs,subgraphs
 
 def disorder_detector(name):
     """
