@@ -2,3 +2,4 @@
 -ligocc 1 1 1
 -smicat 3,4
 -skipANN true
+-ffoption L

@@ -3,6 +3,7 @@ import os
 import random
 import shutil
 import numpy as np
+from typing import List
 from molSimplify.Scripts.geometry import kabsch, distance
 from molSimplify.Scripts.generator import startgen
 from molSimplify.Classes.globalvars import (dict_oneempty_check_st,
@@ -14,7 +15,7 @@ from contextlib import contextmanager
 from pathlib import Path
 
 
-def is_number(s):
+def is_number(s: str) -> bool:
     """check whether the string is a integral/float/scientific"""
     try:
         float(s)
@@ -33,11 +34,11 @@ def working_directory(path: Path):
         os.chdir(prev_cwd)
 
 
-def fuzzy_equal(x1, x2, thresh):
+def fuzzy_equal(x1, x2, thresh: float) -> bool:
     return np.fabs(float(x1) - float(x2)) < thresh
 
 
-def fuzzy_compare_xyz(xyz1, xyz2, thresh):
+def fuzzy_compare_xyz(xyz1, xyz2, thresh: float) -> bool:
     fuzzyEqual = False
     mol1 = mol3D()
     mol1.readfromxyz(xyz1)
@@ -86,9 +87,7 @@ def getAllLigands(xyz):
     return ligands
 
 
-def getMetalLigBondLength(mymol3d):
-    # findMetal only returns 1 metal atom?
-    # TG: fixed findmetal to return a list
+def getMetalLigBondLength(mymol3d: mol3D) -> List[float]:
     mm = mymol3d.findMetal()[0]
     bonded = mymol3d.getBondedAtoms(mm)
     blength = []
@@ -98,39 +97,43 @@ def getMetalLigBondLength(mymol3d):
     return blength
 
 
-def compareNumAtoms(xyz1, xyz2):
+def compareNumAtoms(xyz1, xyz2) -> bool:
     """Compare number of atoms"""
     print("Checking total number of atoms")
     mol1 = mol3D()
     mol1.readfromxyz(xyz1)
     mol2 = mol3D()
-    mol2.readfromxyz(xyz1)
+    mol2.readfromxyz(xyz2)
     # Compare number of atoms
     passNumAtoms = (mol1.natoms == mol2.natoms)
     print("Pass total number of atoms check: ", passNumAtoms)
     return passNumAtoms
 
 
-def compareMLBL(xyz1, xyz2, thresh):
+def compareMLBL(xyz1, xyz2, thresh: float) -> bool:
     """Compare Metal Ligand Bond Length"""
     print("Checking metal-ligand bond length")
     mol1 = mol3D()
     mol1.readfromxyz(xyz1)
     mol2 = mol3D()
-    mol2.readfromxyz(xyz1)
+    mol2.readfromxyz(xyz2)
     bl1 = getMetalLigBondLength(mol1)
     bl2 = getMetalLigBondLength(mol2)
     passMLBL = True
-    for i in range(0, len(bl1)):
-        if not fuzzy_equal(bl1[i], bl2[i], thresh):
-            print("Error! Metal-Ligand bondlength mismatch for bond # ", i)
-            passMLBL = False
+    if len(bl1) != len(bl2):
+        print("Error! Number of metal-ligand bonds is different")
+        passMLBL = False
+    else:
+        for i in range(0, len(bl1)):
+            if not fuzzy_equal(bl1[i], bl2[i], thresh):
+                print("Error! Metal-Ligand bondlength mismatch for bond # ", i)
+                passMLBL = False
     print("Pass metal-ligand bond length check: ", passMLBL)
     print("Threshold for bondlength difference: ", thresh)
     return passMLBL
 
 
-def compareLG(xyz1, xyz2, thresh):
+def compareLG(xyz1, xyz2, thresh: float) -> bool:
     """Compare Ligand Geometry"""
     print("Checking the Ligand Geometries")
     passLG = True
@@ -152,7 +155,7 @@ def compareLG(xyz1, xyz2, thresh):
     return passLG
 
 
-def compareOG(xyz1, xyz2, thresh):
+def compareOG(xyz1, xyz2, thresh: float) -> bool:
     print("Checking the overall geometry")
     passOG = fuzzy_compare_xyz(xyz1, xyz2, thresh)
     print("Pass overall geometry check: ", passOG)

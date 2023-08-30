@@ -14,9 +14,9 @@
 -oxstate II
 -lig N1C=CC=C1
 -runtyp Opt
--smicat 0
+-smicat 1
 -qccode orca
 -ff mmff94
 -ffoption ba
--keepHs True
+-keepHs False
 -qoption REL DKH2

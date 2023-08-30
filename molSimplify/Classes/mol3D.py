@@ -1609,7 +1609,7 @@ class mol3D:
                 nats.append(i)
         return nats
 
-    def getBondCutoff(self, atom, ratom):
+    def getBondCutoff(self, atom: atom3D, ratom: atom3D) -> float:
         """
         Get cutoff based on two atoms.
 
@@ -1632,15 +1632,15 @@ class mol3D:
             distance_max = min(2.75, distance_max)  # 2.75 by 07/22/2021
         if ratom.symbol() == "C" and not atom.symbol() == "H":
             distance_max = min(2.75, distance_max)  # 2.75 by 07/22/2021
-        if ratom.symbol() == "H" and atom.ismetal:
+        if ratom.symbol() == "H" and atom.ismetal():
             # tight cutoff for metal-H bonds
             distance_max = 1.1 * (atom.rad + ratom.rad)
-        if atom.symbol() == "H" and ratom.ismetal:
+        if atom.symbol() == "H" and ratom.ismetal():
             # tight cutoff for metal-H bonds
             distance_max = 1.1 * (atom.rad + ratom.rad)
         return distance_max
 
-    def getBondedAtoms(self, idx):
+    def getBondedAtoms(self, idx: int) -> List[int]:
         """
         Gets atoms bonded to a specific atom. This is determined based on
         element-specific distance cutoffs, rather than predefined valences.

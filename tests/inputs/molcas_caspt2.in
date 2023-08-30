@@ -14,7 +14,7 @@
 -oxstate II
 -lig water
 -smicat 0
--ff mmff94
+-ff uff
 -keepHs True
 -qccode MOLCAS
 -method CASPT2
