@@ -435,7 +435,6 @@ def make_MOF_SBU_RACs(SBUlist,
 
     return names, averaged_SBU_descriptors, lc_names, averaged_lc_descriptors
 
-
 def make_MOF_linker_RACs(linkerlist,
                          linker_subgraphlist,
                          molcif,
@@ -1255,7 +1254,7 @@ def get_MOF_descriptors(data,
     # print('##### METAL LIST', metal_list, [molcif.getAtom(val).symbol() for val in list(metal_list)])
     # print('##### METAL LIST', metal_list, [val.symbol() for val in molcif.atoms])
 
-    if len(metal_list) == 0 and not cof_structure:
+    if len(metal_list) == 0:
         failure_str = f"Failed to featurize {name}: no metal found\n"
         full_names, full_descriptors = failure_response(path, failure_str)
         return full_names, full_descriptors
@@ -1264,7 +1263,7 @@ def get_MOF_descriptors(data,
         inds_in_comp = [i for i in range(len(labels_components)) if labels_components[i] == comp]
         # In the context of sets, & is the intersection.
         # If the intersection is null, the (&) expression is False. The `not` would then make it True.
-        if not set(inds_in_comp) & metal_list and not cof_structure:
+        if not set(inds_in_comp) & metal_list:
             # If this if statement is entered, there is an entire connected component that has no metals in it.
             # No connections to any metal.
             failure_str = f"Failed to featurize {name}: solvent molecules\n"
@@ -1574,7 +1573,7 @@ def get_MOF_descriptors(data,
         full_names = [0]
         full_descriptors = [0]
 
-    if (len(full_names) <= 1) and (len(full_descriptors) <= 1) and not cof_structure:
+    if (len(full_names) <= 1) and (len(full_descriptors) <= 1):
         print(f'full_names is {full_names} and full_descriptors is {full_descriptors}')
         tmpstr = "Failed to featurize %s: Only zero or one total linkers identified.\n" % (name)
         write2file(path, "/FailedStructures.log", tmpstr)
