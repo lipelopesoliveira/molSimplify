@@ -345,7 +345,7 @@ def make_MOF_SBU_RACs(SBUlist,
                 desc_dict = {key2: descriptors[kk] for kk, key2 in enumerate(descriptor_names)}
                 descriptors.remove(name)
                 descriptor_names.remove('name')
-                print(lc_descriptors.shape)
+
                 if lc_descriptors.shape[0] == 0:
                     lc_descriptors = pd.DataFrame(desc_dict, index=[0])
                 else:
@@ -1247,8 +1247,6 @@ def get_MOF_descriptors(data,
                                                                           directed=False,
                                                                           return_labels=True)
 
-    print('Number of connected components:', n_components)
-    print('Labels of connected components:', labels_components)
     # the atom indices of the metals
     metal_list = set([at for at in molcif.findMetal(transition_metals_only=False)])
     # print('##### METAL LIST', metal_list, [molcif.getAtom(val).symbol() for val in list(metal_list)])
@@ -1556,7 +1554,6 @@ def get_MOF_descriptors(data,
         # ECFP_names
         full_names = descriptor_names + lig_descriptor_names + lc_descriptor_names
         full_descriptors = list(descriptors) + list(lig_descriptors) + list(lc_descriptors)
-        print(len(full_names), len(full_descriptors))
         # except:
         #     full_names = [0]
         #     full_descriptors = [0]
